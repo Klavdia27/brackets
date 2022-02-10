@@ -1,30 +1,39 @@
 module.exports = function check(str, bracketsConfig) {
-  console.log('1=',str);
-  const arrOpen = ["(","{","[","|"];
-  const arrClose = [")","}","]","|"];
-  console.log(arrOpen[0] === str[0]);
-  
-  if (str.length % 2 === 1) { return false}
- 
-  let arr = [];
-  for ( elem of str) {
-    //console.log(elem)
-    if (elem === "(" && elem === "{" && elem === "[") { arr.push(elem)}
-    if (elem === ")") {
-      if (elem-1 === "(") { arr.pop()}
-    }
-    if (elem === "}") {
-      if (elem-1 === "{") { arr.pop()}
-    }
-    if (elem === "]") {
-      if (elem-1 === "[") { arr.pop()}
-    }
-  
 
+  const arrOpen = ['(', '{', '[', '1', '3', '5']; 
+  const arrDouble = ['|', '7', '8'];
+  const objPairs = {
+    [')']: '(',
+    ['}']: '{',
+    [']']: '[',
+    ['|']: '|',
+    ['2']: '1',
+    ['4']: '3',
+    ['6']: '5',
+    ['7']: '7',
+    ['8']: '8',
+  };
 
+  let stack = [];
+  for (let i = 0; i < str.length; i++) {
+    let curSymbol = str[i];
+    let topElem = stack[stack.length - 1];
+    
+    if (arrOpen.includes(curSymbol)) {
+      stack.push(curSymbol);
+    } else if((arrDouble.includes(curSymbol)) && objPairs[curSymbol] !== topElem) {
+        stack.push(curSymbol);
+      } else {
+      if (stack.length === 0) {
+        return false;
+      }
+
+      if (objPairs[curSymbol] === topElem)  {
+        stack.pop();
+      } else {
+        return false;
+      }
+    }
   }
- if (arr.length === 0) {return true} 
-
-
-
+  return stack.length === 0;
 }
